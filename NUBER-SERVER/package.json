@@ -1,0 +1,43 @@
+{
+  "name": "nuber-server",
+  "version": "1.0.0",
+  "description": "Server for the (N)Uber Clone Course on Momad Academy, GraphQL, Typescript, NodeJS",
+  "main": "index.js",
+  "author": "Thomas Lee <jylee@2ipco.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/cors": "^2.8.5",
+    "@types/helmet": "^0.0.43",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^12.0.2",
+    "@types/twilio": "^0.0.10",
+    "babel-runtime": "^6.26.0",
+    "gql-merge": "^0.0.6",
+    "graphql-to-typescript": "^0.1.2",
+    "nodemon": "^1.19.1",
+    "pg": "^7.11.0",
+    "ts-node": "^8.2.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typeorm": "^0.2.17",
+    "typescript": "^3.4.5"
+  },
+  "scripts": {
+    "predev": "yarn run types",
+    "dev": "cd src && nodemon --exec ts-node index.ts -e ts,graphql",
+    "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/api/**/*.graphql",
+    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "class-validator": "^0.9.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "graphql-tools": "^4.0.4",
+    "graphql-yoga": "^1.17.4",
+    "helmet": "^3.18.0",
+    "merge-graphql-schemas": "^1.5.8",
+    "morgan": "^1.9.1",
+    "twilio": "^3.31.1"
+  }
+}
