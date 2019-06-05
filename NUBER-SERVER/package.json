@@ -9,6 +9,8 @@
     "@types/bcrypt": "^3.0.0",
     "@types/cors": "^2.8.5",
     "@types/helmet": "^0.0.43",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/mailgun-js": "^0.16.3",
     "@types/morgan": "^1.7.35",
     "@types/node": "^12.0.2",
     "@types/twilio": "^0.0.10",
@@ -26,7 +28,11 @@
     "predev": "yarn run types",
     "dev": "cd src && nodemon --exec ts-node index.ts -e ts,graphql",
     "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/api/**/*.graphql",
-    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts"
+    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
+    "prebuild": "rm -rf dist",
+    "build": "tsc",
+    "postbuild": "cd src && copy ./api/**/*.graphql ../dist/api",
+    "start": "cd dist && node ."
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
@@ -36,6 +42,8 @@
     "graphql-tools": "^4.0.4",
     "graphql-yoga": "^1.17.4",
     "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
     "merge-graphql-schemas": "^1.5.8",
     "morgan": "^1.9.1",
     "twilio": "^3.31.1"
