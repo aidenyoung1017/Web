@@ -79,8 +79,9 @@ var App = /** @class */ (function () {
         this.app = new graphql_yoga_1.GraphQLServer({
             schema: schema_1.default,
             context: function (req) {
+                //const { connection: { context = null} = {} } = req;
                 return {
-                    req: req.request
+                    req: req.request,
                 };
             }
         });

@@ -52,17 +52,19 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var User_1 = __importDefault(require("../../../entities/User"));
 var createJWT_1 = __importDefault(require("../../../utils/createJWT"));
+var Verification_1 = __importDefault(require("../../../entities/Verification"));
+var sendEmail_1 = require("../../../utils/sendEmail");
 var resolvers = {
     Mutation: {
         EmailSignUp: function (_, args) { return __awaiter(_this, void 0, void 0, function () {
-            var email, existingUser, newUser, token, error_1;
+            var email, existingUser, phoneVerification, newUser, emailVerification, token, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         email = args.email;
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 6, , 7]);
+                        _a.trys.push([1, 11, , 12]);
                         return [4 /*yield*/, User_1.default.findOne({ email: email })];
                     case 2:
                         existingUser = _a.sent();
@@ -72,24 +74,48 @@ var resolvers = {
                                 error: "You should log in instead",
                                 token: null
                             }];
-                    case 3: return [4 /*yield*/, User_1.default.create(__assign({}, args)).save()];
+                    case 3: return [4 /*yield*/, Verification_1.default.findOne({
+                            payload: args.phoneNumber,
+                            verified: true
+                        })];
                     case 4:
+                        phoneVerification = _a.sent();
+                        if (!phoneVerification) return [3 /*break*/, 9];
+                        return [4 /*yield*/, User_1.default.create(__assign({}, args)).save()];
+                    case 5:
                         newUser = _a.sent();
+                        if (!newUser.email) return [3 /*break*/, 8];
+                        return [4 /*yield*/, Verification_1.default.create({
+                                payload: newUser.email,
+                                target: "EMAIL"
+                            }).save()];
+                    case 6:
+                        emailVerification = _a.sent();
+                        return [4 /*yield*/, sendEmail_1.sendVerificationEmail(newUser.fullName, emailVerification.key)];
+                    case 7:
+                        _a.sent();
+                        _a.label = 8;
+                    case 8:
                         token = createJWT_1.default(newUser.id);
                         return [2 /*return*/, {
                                 ok: true,
                                 error: null,
                                 token: token
                             }];
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
+                    case 9: return [2 /*return*/, {
+                            ok: false,
+                            error: "You haven't verified your phone number",
+                            token: null
+                        }];
+                    case 10: return [3 /*break*/, 12];
+                    case 11:
                         error_1 = _a.sent();
                         return [2 /*return*/, {
                                 ok: false,
                                 error: error_1.message,
                                 token: null
                             }];
-                    case 7: return [2 /*return*/];
+                    case 12: return [2 /*return*/];
                 }
             });
         }); }

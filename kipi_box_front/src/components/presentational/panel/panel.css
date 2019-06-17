@@ -1,0 +1,13 @@
+.Panel{
+    height: 200px;
+    width: 500px;
+
+    background-color: rgb(255, 255, 255, 0.9);
+    box-shadow: 0 8px 38px rgba(133, 133, 133, 0.3), 0 5px 12px rgba(133, 133, 133, 0.22);
+    border-radius: 10px;
+    
+    margin-bottom: 10px;
+    padding: 0 0px;
+    
+    
+}

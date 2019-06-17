@@ -34,25 +34,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
+var privateResolver_1 = __importDefault(require("../../../utils/privateResolver"));
+var Verification_1 = __importDefault(require("../../../entities/Verification"));
+var sendEmail_1 = require("../../../utils/sendEmail");
 var resolvers = {
-    Query: {
-        GetMyProfile: function (_, __, _a) {
+    Mutation: {
+        RequestEmailVerification: privateResolver_1.default(function (_, __, _a) {
             var req = _a.req;
             return __awaiter(_this, void 0, void 0, function () {
-                var user;
+                var user, oldVerification, newVerification, error_1;
                 return __generator(this, function (_b) {
-                    user = req.user;
-                    return [2 /*return*/, {
-                            ok: true,
-                            error: null,
-                            user: user
-                        }];
+                    switch (_b.label) {
+                        case 0:
+                            user = req.user;
+                            if (!(user.email && !user.verifiedEmail)) return [3 /*break*/, 7];
+                            _b.label = 1;
+                        case 1:
+                            _b.trys.push([1, 5, , 6]);
+                            return [4 /*yield*/, Verification_1.default.findOne({
+                                    payload: user.email
+                                })];
+                        case 2:
+                            oldVerification = _b.sent();
+                            if (oldVerification) {
+                                oldVerification.remove();
+                            }
+                            return [4 /*yield*/, Verification_1.default.create({
+                                    payload: user.email,
+                                    target: "EMAIL"
+                                }).save()];
+                        case 3:
+                            newVerification = _b.sent();
+                            return [4 /*yield*/, sendEmail_1.sendVerificationEmail(user.fullName, newVerification.key)];
+                        case 4:
+                            _b.sent();
+                            return [2 /*return*/, {
+                                    ok: true,
+                                    error: null
+                                }];
+                        case 5:
+                            error_1 = _b.sent();
+                            return [2 /*return*/, {
+                                    ok: false,
+                                    error: error_1.message
+                                }];
+                        case 6: return [3 /*break*/, 8];
+                        case 7: return [2 /*return*/, {
+                                ok: false,
+                                error: "Your user has no email to verify"
+                            }];
+                        case 8: return [2 /*return*/];
+                    }
                 });
             });
-        }
+        })
     }
 };
 exports.default = resolvers;
-//# sourceMappingURL=GetMyProfile.resovlers.js.map
+//# sourceMappingURL=RequestEmailVerification.resolvers.js.map

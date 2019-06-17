@@ -66,7 +66,6 @@ var resolvers = {
                             }).save()];
                     case 3:
                         newVerification = _a.sent();
-                        console.log(newVerification);
                         return [4 /*yield*/, sendSMS_1.sendVerificationSMS(newVerification.payload, newVerification.key)];
                     case 4:
                         _a.sent();

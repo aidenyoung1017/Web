@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
-import Panel from './panel';
+import PanelContainer from './components/container/panelContainer/panelContainer';
+import HeaderContainer from './components/container/headerContainer/headerContainer';
 
 function App() {
   return (
     <div className="App">
-      <Panel/>
+      <HeaderContainer/>
+      <PanelContainer/>
     </div>
   );
 }
